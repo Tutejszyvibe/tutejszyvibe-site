@@ -3,40 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tutéjszy Vibe — Postery z Wrocławia</title>
+  <title>Tutéjszy Vibe — Nowa kolekcja plakatów</title>
   <meta
     name="description"
-    content="Autorskie postery z Wrocławia — Nadodrze, Ołbin, mosty, podwórka, zachody słońca i miejski klimat."
+    content="Nowa kolekcja autorskich plakatów z Wrocławia. Tramwaj, zachody słońca, ulice, mosty, architektura i miejska geometria. Zobacz nasze prace i zamów własny plakat."
   />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg: #0b0b0d;
-      --bg-soft: #141418;
-      --card: rgba(255, 255, 255, 0.05);
-      --line: rgba(255, 255, 255, 0.12);
+      --card-bg: rgba(255, 255, 255, 0.04);
+      --card-border: rgba(255, 255, 255, 0.08);
       --text: #f4f1ea;
       --muted: #b6b2aa;
-      --gold: #d0a35b;
-      --gold-2: #f0c27c;
-      --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      --highlight: #d0a35b;
+      --highlight-2: #f0c27c;
+      --max-width: 1280px;
       --radius: 24px;
-      --max: 1240px;
+      --shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
     }
 
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
-      font-family: 'Inter', Arial, Helvetica, sans-serif;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
       color: var(--text);
-      background:
-        radial-gradient(circle at top left, rgba(208, 163, 91, 0.14), transparent 28%),
-        radial-gradient(circle at right top, rgba(255, 255, 255, 0.06), transparent 20%),
-        linear-gradient(180deg, #0a0a0c 0%, #111116 100%);
       line-height: 1.55;
       overflow-x: hidden;
     }
@@ -48,103 +43,98 @@
 
     img {
       display: block;
-      max-width: 100%;
+      width: 100%;
+      height: auto;
     }
 
     .container {
-      width: min(calc(100% - 32px), var(--max));
+      width: min(100% - 32px, var(--max-width));
       margin: 0 auto;
     }
 
-    .header {
+    header {
       position: sticky;
       top: 0;
-      z-index: 30;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      background: rgba(10, 10, 12, 0.68);
-      border-bottom: 1px solid var(--line);
+      z-index: 50;
+      backdrop-filter: blur(12px);
+      background: rgba(10, 10, 12, 0.7);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     }
 
     .nav {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
-      min-height: 76px;
+      min-height: 72px;
     }
 
     .brand {
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 800;
       letter-spacing: -0.03em;
-      transition: opacity 0.2s ease;
     }
 
-    .brand:hover { opacity: 0.85; }
-    .brand span { color: var(--gold-2); }
+    .brand span {
+      color: var(--highlight-2);
+    }
 
     .nav-links {
       display: flex;
-      align-items: center;
       gap: 24px;
-      flex-wrap: wrap;
     }
 
     .nav-links a {
-      color: var(--muted);
       font-size: 14px;
       font-weight: 500;
+      color: var(--muted);
       transition: color 0.2s ease;
     }
 
-    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover {
+      color: var(--text);
+    }
 
     .hero {
-      padding: 90px 0 60px;
+      padding: 80px 0 60px;
     }
 
     .hero-grid {
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
       gap: 40px;
+      grid-template-columns: 1fr 1fr;
       align-items: center;
     }
 
     .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      min-height: 38px;
-      padding: 0 16px;
+      display: inline-block;
+      padding: 6px 14px;
+      border: 1px solid rgba(255,255,255,0.2);
       border-radius: 999px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.03);
-      color: var(--gold-2);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.09em;
+      font-size: 11px;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      margin-bottom: 20px;
+      color: var(--highlight-2);
+      background: rgba(255,255,255,0.05);
+      margin-bottom: 16px;
     }
 
     h1 {
-      margin: 0 0 20px;
-      font-size: clamp(42px, 6vw, 80px);
-      line-height: 1.05;
-      letter-spacing: -0.04em;
+      margin: 0;
+      font-size: clamp(36px, 7vw, 72px);
       font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
     }
 
     .lead {
-      max-width: 620px;
-      margin: 0 0 36px;
-      color: var(--muted);
+      margin-top: 20px;
       font-size: 18px;
-      font-weight: 400;
+      color: var(--muted);
+      max-width: 580px;
     }
 
-    .actions {
+    .hero-actions {
+      margin-top: 32px;
       display: flex;
       flex-wrap: wrap;
       gap: 16px;
@@ -154,237 +144,114 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 52px;
-      padding: 0 28px;
       border-radius: 999px;
-      border: 1px solid var(--line);
       font-weight: 600;
       font-size: 15px;
-      transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
-      box-shadow: var(--shadow);
-      cursor: pointer;
+      padding: 14px 26px;
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: transform 0.2s ease, background 0.2s ease;
     }
-
-    .btn:hover { transform: translateY(-3px); }
-    .btn:active { transform: translateY(0); }
 
     .btn-primary {
-      color: #151515;
-      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-2) 100%);
-      border-color: transparent;
-      box-shadow: 0 10px 20px rgba(208, 163, 91, 0.2);
-    }
-
-    .btn-primary:hover {
-      box-shadow: 0 15px 25px rgba(208, 163, 91, 0.3);
+      color: #131313;
+      background: linear-gradient(135deg, var(--highlight) 0%, var(--highlight-2) 100%);
+      border: none;
     }
 
     .btn-secondary {
-      background: rgba(255,255,255,0.03);
+      background: rgba(255,255,255,0.05);
       color: var(--text);
     }
 
-    .btn-secondary:hover {
-      background: rgba(255,255,255,0.08);
-      border-color: rgba(255,255,255,0.25);
+    .btn:hover {
+      transform: translateY(-2px);
     }
 
-    .hero-card {
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.01));
-      border: 1px solid var(--line);
-      border-radius: 32px;
-      padding: 20px;
-      box-shadow: var(--shadow);
-      position: relative;
-    }
-
-    .hero-mosaic {
+    .mosaic {
       display: grid;
-      grid-template-columns: 1fr 1fr;
       gap: 16px;
+      grid-template-columns: 1fr 1fr;
     }
 
-    .mini-poster {
-      aspect-ratio: 3 / 4;
-      border-radius: 20px;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.05);
-      background: #1a1a1f;
-      position: relative;
-    }
-
-    .mini-poster img {
+    .mosaic img {
       width: 100%;
-      height: 100%;
+      border-radius: 16px;
       object-fit: cover;
-      transition: transform 0.5s ease;
+      aspect-ratio: 3/4;
+      border: 1px solid rgba(255,255,255,0.06);
     }
 
-    .mini-poster:hover img {
-      transform: scale(1.05);
-    }
-
-    .mini-poster::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
-      pointer-events: none;
-    }
-
-    .section {
+    .posters {
       padding: 60px 0;
     }
 
-    .section-header {
-      margin-bottom: 40px;
-    }
-
-    h2 {
-      margin: 0 0 12px;
-      font-size: clamp(32px, 4vw, 48px);
-      line-height: 1.1;
-      letter-spacing: -0.03em;
-    }
-
-    .section-subtitle {
-      max-width: 700px;
-      color: var(--muted);
-      font-size: 17px;
-      margin: 0;
-    }
-
-    .catalog {
+    .posters-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
       gap: 32px;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     }
 
-    .card {
-      overflow: hidden;
-      border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
-      transition: transform 0.3s ease, border-color 0.3s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-      border-color: rgba(255,255,255,0.2);
-    }
-
-    .poster-image {
-      aspect-ratio: 4 / 5;
-      background: #17171b;
-      overflow: hidden;
-      border-bottom: 1px solid var(--line);
+    .poster-card {
       position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .poster-image img {
+    .poster-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.55);
+    }
+
+    .poster-card img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      aspect-ratio: 3/4;
     }
 
-    .card:hover .poster-image img {
-      transform: scale(1.04);
-    }
-
-    .card-body {
-      padding: 28px;
-    }
-
-    .title-row {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-
-    .poster-title {
-      margin: 0;
-      font-size: 26px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-    }
-
-    .tag {
-      white-space: nowrap;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--gold-2);
-      border: 1px solid rgba(208, 163, 91, 0.3);
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: rgba(208, 163, 91, 0.08);
-    }
-
-    .translations {
-      display: grid;
-      gap: 8px;
-      margin: 16px 0 24px;
-      padding: 16px;
-      border-radius: 16px;
-      background: rgba(0,0,0,0.2);
-      border: 1px solid rgba(255,255,255,0.04);
-    }
-
-    .translations div {
-      color: var(--muted);
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .translations strong {
+    .poster-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 12px 16px;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(4px);
       color: var(--text);
-      font-size: 12px;
-      padding: 2px 6px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 4px;
-      letter-spacing: 0.05em;
-      min-width: 28px;
-      text-align: center;
-    }
-
-    .card-text {
-      margin: 0 0 24px;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.6;
-    }
-
-    .poster-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .poster-actions .btn {
-      min-height: 46px;
       font-size: 14px;
-      padding: 0 20px;
-      box-shadow: none;
-      flex: 1;
-      text-align: center;
+      line-height: 1.4;
+    }
+
+    .poster-info .title {
+      font-weight: 600;
+    }
+
+    .poster-info .translations {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.3;
+    }
+
+    .info-section {
+      padding: 60px 0;
     }
 
     .info-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
       gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     }
 
     .info-box {
-      border-radius: 24px;
-      padding: 32px;
-      border: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+      border-radius: var(--radius);
+      padding: 24px;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
       box-shadow: var(--shadow);
       transition: transform 0.3s ease;
     }
@@ -394,16 +261,15 @@
     }
 
     .info-box h3 {
-      margin: 0 0 12px;
+      margin-top: 0;
+      margin-bottom: 12px;
       font-size: 20px;
-      letter-spacing: -0.02em;
     }
 
     .info-box p {
       margin: 0;
-      color: var(--muted);
       font-size: 15px;
-      line-height: 1.6;
+      color: var(--muted);
     }
 
     .cta {
@@ -411,333 +277,216 @@
     }
 
     .cta-box {
-      border-radius: 32px;
-      padding: 60px 40px;
-      border: 1px solid var(--line);
-      background:
-        radial-gradient(circle at top left, rgba(208, 163, 91, 0.15), transparent 40%),
-        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+      border-radius: var(--radius);
+      padding: 40px 32px;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
       box-shadow: var(--shadow);
       text-align: center;
     }
 
     .cta-box h2 {
-      margin-bottom: 16px;
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 30px;
     }
 
     .cta-box p {
-      max-width: 650px;
-      margin: 0 auto 32px;
+      margin-bottom: 24px;
       color: var(--muted);
-      font-size: 18px;
+      font-size: 16px;
     }
 
-    .footer {
-      border-top: 1px solid var(--line);
-      padding: 32px 0 48px;
-      background: rgba(0,0,0,0.2);
-    }
-
-    .footer-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      flex-wrap: wrap;
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.12);
+      padding: 24px 0;
       color: var(--muted);
       font-size: 14px;
+      text-align: center;
     }
 
-    .footer-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 24px;
-    }
-
-    .footer-links a:hover {
-      color: var(--text);
-    }
-
-    @media (max-width: 980px) {
-      .hero-grid,
-      .catalog,
-      .info-grid {
-        grid-template-columns: 1fr;
-      }
-
+    @media (max-width: 800px) {
       .hero-grid {
+        grid-template-columns: 1fr;
         gap: 60px;
       }
+      .mosaic {
+        grid-template-columns: 1fr 1fr;
+      }
     }
 
-    @media (max-width: 720px) {
+    @media (max-width: 480px) {
       .nav-links {
         display: none;
       }
-
       .hero {
-        padding-top: 40px;
+        padding: 60px 0;
       }
-
       h1 {
-        font-size: 38px;
+        font-size: 36px;
       }
-
-      .title-row {
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      .cta-box {
-        padding: 40px 20px;
-      }
-    }
-
-    @media (max-width: 520px) {
-      .container {
-        width: min(calc(100% - 24px), var(--max));
-      }
-
-      .card-body,
-      .info-box {
-        padding: 20px;
-      }
-
-      .poster-actions {
-        flex-direction: column;
-      }
-
-      .footer-row {
-        flex-direction: column;
-        text-align: center;
+      .posters-grid {
+        gap: 20px;
       }
     }
   </style>
 </head>
 <body>
-  <header class="header">
+  <header>
     <div class="container nav">
-      <a href="#top" class="brand">Tutéjszy <span>Vibe</span></a>
+      <div class="brand">Tutéjszy <span>Vibe</span></div>
       <nav class="nav-links">
         <a href="#posters">Postery</a>
         <a href="#about">O projekcie</a>
-        <a href="#formats">Formaty</a>
         <a href="#contact">Kontakt</a>
       </nav>
     </div>
   </header>
 
-  <main id="top">
-    <section class="hero">
-      <div class="container hero-grid">
-        <div>
-          <div class="badge">Postery z Wrocławia</div>
-          <h1>Zabierz kawałek Wrocławia ze sobą</h1>
-          <p class="lead">
-            Autorskie postery inspirowane Nadodrzem, Ołbinem, mostami, podwórkami,
-            symetrią, miejskimi zachodami słońca i lokalnym klimatem.
-            To prawdziwa pamiątka z miasta — nie zwykły turystyczny gadżet.
-          </p>
-          <div class="actions">
-            <a class="btn btn-primary" href="#posters">Zobacz kolekcję</a>
-            <a class="btn btn-secondary" href="https://t.me/pokerathletespro" target="_blank" rel="noopener noreferrer">Napisz na Telegramie</a>
-          </div>
-        </div>
-
-        <div class="hero-card">
-          <div class="hero-mosaic">
-            <div class="mini-poster">
-              <img src="https://drive.google.com/uc?export=view&id=141kDUcj5ano0z0kSID-ygcYrvoDzva9J" alt="Zachód słońca">
-            </div>
-            <div class="mini-poster">
-              <img src="https://drive.google.com/uc?export=view&id=1nlCZ-qY4B_XzoQo2aPgkrv98W-jo3RED" alt="Gołębie">
-            </div>
-            <div class="mini-poster">
-              <img src="https://drive.google.com/uc?export=view&id=1q6t1mSXQfy6k6cfbHT5cHyRpcnb6Fzoh" alt="Trzebnicka">
-            </div>
-            <div class="mini-poster">
-              <img src="https://drive.google.com/uc?export=view&id=1QyNf3TSXKtQspO7JFE0sHg0ARnUDK5fw" alt="Symetria mostu">
-            </div>
-          </div>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="badge">Postery z Wrocławia</div>
+        <h1>Zabierz kawałek Wrocławia ze sobą</h1>
+        <p class="lead">
+          Nasza kolekcja plakatów oddaje unikatowy klimat Nadodrza i Ołbina: tramwaje sunące po krzywych torach,
+          zachody słońca odbijające się w Odrze, wielkomiejskie ulice, mosty, architektura i geometryczne kompozycje.
+          Odkryj każdy z tych widoków i zabierz go do domu.
+        </p>
+        <div class="hero-actions">
+          <a href="#posters" class="btn btn-primary">Zobacz postery</a>
+          <a href="https://t.me/pokerathletespro" target="_blank" rel="noopener" class="btn btn-secondary">Napisz na Telegramie</a>
         </div>
       </div>
-    </section>
-
-    <section class="section" id="posters">
-      <div class="container">
-        <div class="section-header">
-          <h2>Kolekcja posterów</h2>
-          <p class="section-subtitle">
-            Cztery autorskie prace gotowe do prezentacji i sprzedaży.
-            Nazwy pokazane są po polsku, angielsku i niemiecku.
-          </p>
-        </div>
-
-        <div class="catalog">
-          <article class="card">
-            <div class="poster-image">
-              <img src="https://drive.google.com/uc?export=view&id=141kDUcj5ano0z0kSID-ygcYrvoDzva9J" alt="Zachód słońca / Sunset / Sonnenuntergang">
-            </div>
-            <div class="card-body">
-              <div class="title-row">
-                <h3 class="poster-title">Zachód słońca</h3>
-                <div class="tag">Poster 01</div>
-              </div>
-              <div class="translations">
-                <div><strong>PL</strong> Zachód słońca</div>
-                <div><strong>EN</strong> Sunset</div>
-                <div><strong>DE</strong> Sonnenuntergang</div>
-              </div>
-              <p class="card-text">
-                Wieczorne światło, woda i ciepły miejski horyzont.
-                Poster dla tych, którzy chcą zachować atmosferę Wrocławia u siebie.
-              </p>
-              <div class="poster-actions">
-                <a class="btn btn-primary" href="https://drive.google.com/file/d/141kDUcj5ano0z0kSID-ygcYrvoDzva9J/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Otwórz w HD</a>
-                <a class="btn btn-secondary" href="https://t.me/pokerathletespro" target="_blank" rel="noopener noreferrer">Zamów</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="card">
-            <div class="poster-image">
-              <img src="https://drive.google.com/uc?export=view&id=1nlCZ-qY4B_XzoQo2aPgkrv98W-jo3RED" alt="Gołębie / Pigeons / Tauben">
-            </div>
-            <div class="card-body">
-              <div class="title-row">
-                <h3 class="poster-title">Gołębie</h3>
-                <div class="tag">Poster 02</div>
-              </div>
-              <div class="translations">
-                <div><strong>PL</strong> Gołębie</div>
-                <div><strong>EN</strong> Pigeons</div>
-                <div><strong>DE</strong> Tauben</div>
-              </div>
-              <p class="card-text">
-                Scena z podwórka, ptaki i miejska poetyka.
-                Ta praca oddaje surowy, ale żywy charakter dzielnicy.
-              </p>
-              <div class="poster-actions">
-                <a class="btn btn-primary" href="https://drive.google.com/file/d/1nlCZ-qY4B_XzoQo2aPgkrv98W-jo3RED/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Otwórz w HD</a>
-                <a class="btn btn-secondary" href="https://t.me/pokerathletespro" target="_blank" rel="noopener noreferrer">Zamów</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="card">
-            <div class="poster-image">
-              <img src="https://drive.google.com/uc?export=view&id=1q6t1mSXQfy6k6cfbHT5cHyRpcnb6Fzoh" alt="Trzebnicka / Trzebnicka Street / Trzebnicka-Straße">
-            </div>
-            <div class="card-body">
-              <div class="title-row">
-                <h3 class="poster-title">Trzebnicka</h3>
-                <div class="tag">Poster 03</div>
-              </div>
-              <div class="translations">
-                <div><strong>PL</strong> Trzebnicka</div>
-                <div><strong>EN</strong> Trzebnicka Street</div>
-                <div><strong>DE</strong> Trzebnicka-Straße</div>
-              </div>
-              <p class="card-text">
-                Widok lokalnej ulicy z jej rytmem i tożsamością.
-                Kawałek codziennego Wrocławia zamieniony w obraz.
-              </p>
-              <div class="poster-actions">
-                <a class="btn btn-primary" href="https://drive.google.com/file/d/1q6t1mSXQfy6k6cfbHT5cHyRpcnb6Fzoh/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Otwórz w HD</a>
-                <a class="btn btn-secondary" href="https://t.me/pokerathletespro" target="_blank" rel="noopener noreferrer">Zamów</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="card">
-            <div class="poster-image">
-              <img src="https://drive.google.com/uc?export=view&id=1QyNf3TSXKtQspO7JFE0sHg0ARnUDK5fw" alt="Symetria mostu / Bridge Symmetry / Brückensymmetrie">
-            </div>
-            <div class="card-body">
-              <div class="title-row">
-                <h3 class="poster-title">Symetria mostu</h3>
-                <div class="tag">Poster 04</div>
-              </div>
-              <div class="translations">
-                <div><strong>PL</strong> Symetria mostu</div>
-                <div><strong>EN</strong> Bridge Symmetry</div>
-                <div><strong>DE</strong> Brückensymmetrie</div>
-              </div>
-              <p class="card-text">
-                Struktura, balans i spokój.
-                Most widziany jako forma i rytm dla tych, którzy kochają architekturę i geometrię miasta.
-              </p>
-              <div class="poster-actions">
-                <a class="btn btn-primary" href="https://drive.google.com/file/d/1QyNf3TSXKtQspO7JFE0sHg0ARnUDK5fw/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Otwórz w HD</a>
-                <a class="btn btn-secondary" href="https://t.me/pokerathletespro" target="_blank" rel="noopener noreferrer">Zamów</a>
-              </div>
-            </div>
-          </article>
-        </div>
+      <div class="mosaic">
+        <img src="Zakat.jpg" alt="Zachód słońca">
+        <img src="ChatGPT Image 14 апр. 2026 г., 18_28_59.png" alt="Gołębie">
+        <img src="T.png" alt="Tramwaj i łuk">
+        <img src="SH.png" alt="Tęcza nad uczelnią">
       </div>
-    </section>
-
-    <section class="section" id="about">
-      <div class="container">
-        <div class="section-header">
-          <h2>O projekcie</h2>
-          <p class="section-subtitle">
-            Tutéjszy Vibe to wizualny dziennik Wrocławia — mosty, podwórka, ulice,
-            światło, rytm miasta i lokalna pamięć.
-          </p>
-        </div>
-
-        <div class="info-grid">
-          <div class="info-box">
-            <h3>Autentyczny klimat</h3>
-            <p>
-              To nie są standardowe turystyczne postery.
-              Powstały wokół prawdziwego nastroju Nadodrza, Ołbina i ukrytego charakteru miasta.
-            </p>
-          </div>
-          <div class="info-box" id="formats">
-            <h3>Dostępne formaty</h3>
-            <p>
-              Możesz zamówić formaty A4, A3, A2 oraz limitowane edycje.
-              Możliwa wysyłka w Polsce i w UE.
-            </p>
-          </div>
-          <div class="info-box">
-            <h3>Prosty proces zamówienia</h3>
-            <p>
-              Wybierasz poster, który Ci się podoba, i składasz zamówienie bezpośrednio przez Telegram.
-              Szybko i wygodnie.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="cta" id="contact">
-      <div class="container">
-        <div class="cta-box">
-          <h2>Chcesz zamówić poster?</h2>
-          <p>
-            Wybierz pracę, która najbardziej Ci się podoba, i napisz przez Telegram.
-            Ustalimy format, wysyłkę i szczegóły zamówienia.
-          </p>
-          <div class="actions" style="justify-content:center;">
-            <a class="btn btn-primary" href="https://t.me/pokerathletespro" target="_blank" rel="noopener noreferrer">Napisz na Telegramie</a>
-            <a class="btn btn-secondary" href="#posters">Wróć do kolekcji</a>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="container footer-row">
-      <div>© 2026 Tutéjszy Vibe</div>
-      <div class="footer-links">
-        <a href="https://t.me/pokerathletespro" target="_blank" rel="noopener noreferrer">Telegram</a>
-      </div>
-      <div>Wrocław · Nadodrze · Ołbin</div>
     </div>
+  </section>
+
+  <section class="posters" id="posters">
+    <div class="container">
+      <h2 style="margin-top: 0; margin-bottom: 24px; font-size: 32px;">Kolekcja plakatów</h2>
+      <div class="posters-grid">
+        
+        <div class="poster-card">
+          <img src="T.png" alt="Tramwaj i łuk">
+          <div class="poster-info">
+            <div class="title">Tramwaj i łuk</div>
+            <div class="translations">Tram &amp; Arc / Straßenbahn und Bogen</div>
+          </div>
+        </div>
+        
+        <div class="poster-card">
+          <img src="Zakat.jpg" alt="Zachód słońca">
+          <div class="poster-info">
+            <div class="title">Zachód słońca</div>
+            <div class="translations">Sunset / Sonnenuntergang</div>
+          </div>
+        </div>
+        
+        <div class="poster-card">
+          <img src="ChatGPT Image 14 апр. 2026 г., 18_54_23 (1).png" alt="Trzebnicka">
+          <div class="poster-info">
+            <div class="title">Trzebnicka</div>
+            <div class="translations">Trzebnicka Street / Trzebnicka-Straße</div>
+          </div>
+        </div>
+        
+        <div class="poster-card">
+          <img src="ChatGPT Image 14 апр. 2026 г., 18_28_59.png" alt="Gołębie">
+          <div class="poster-info">
+            <div class="title">Gołębie</div>
+            <div class="translations">Pigeons / Tauben</div>
+          </div>
+        </div>
+        
+        <div class="poster-card">
+          <img src="SH.png" alt="Tęcza nad uczelnią">
+          <div class="poster-info">
+            <div class="title">Tęcza nad uczelnią</div>
+            <div class="translations">Rainbow over School / Regenbogen über Schule</div>
+          </div>
+        </div>
+        
+        <div class="poster-card">
+          <img src="SH1.png" alt="Uczelnia o zachodzie">
+          <div class="poster-info">
+            <div class="title">Uczelnia o zachodzie</div>
+            <div class="translations">School at Sunset / Schule bei Sonnenuntergang</div>
+          </div>
+        </div>
+        
+        <div class="poster-card">
+          <img src="Most.png" alt="Geometria mostu">
+          <div class="poster-info">
+            <div class="title">Geometria mostu</div>
+            <div class="translations">Bridge Geometry / Brückengeometrie</div>
+          </div>
+        </div>
+        
+        <div class="poster-card">
+          <img src="86631c63-646f-4e8c-b9aa-de7be326ac3c.png" alt="Symetria mostu">
+          <div class="poster-info">
+            <div class="title">Symetria mostu</div>
+            <div class="translations">Bridge Symmetry / Brückensymmetrie</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="info-section" id="about">
+    <div class="container">
+      <h2 style="margin-top: 0; margin-bottom: 24px; font-size: 32px;">O projekcie</h2>
+      <div class="info-grid">
+        <div class="info-box">
+          <h3>Autentyczne spojrzenie</h3>
+          <p>
+            Każdy plakat to wynik spaceru ulicami Wrocławia. Szukamy miejsc, które łączą historię z nowoczesnością,
+            ukryty urok dzielnic oraz chwilę, która oddaje prawdziwy klimat miasta.
+          </p>
+        </div>
+        <div class="info-box">
+          <h3>Osiem oryginalnych prac</h3>
+          <p>
+            W tej serii znajdziesz zarówno kadry z tramwajami i zachodami słońca, jak i mocne, geometryczne kompozycje.
+            Każdy plakat dostępny jest w kilku formatach: A4, A3 oraz A2.
+          </p>
+        </div>
+        <div class="info-box">
+          <h3>Jakość i lokalność</h3>
+          <p>
+            Plakaty drukowane są na grubym papierze o wysokiej jakości, dzięki czemu nasycone barwy pozostaną piękne
+            przez lata. Wszystkie prace powstają we Wrocławiu.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta" id="contact">
+    <div class="container">
+      <div class="cta-box">
+        <h2>Zamów swój plakat</h2>
+        <p>
+          Spodobał Ci się któryś z plakatów? Napisz do nas na Telegramie, aby zamówić dowolny format,
+          dowiedzieć się o dostępności oraz warunkach wysyłki.
+        </p>
+        <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+          <a href="https://t.me/pokerathletespro" target="_blank" rel="noopener" class="btn btn-primary">Napisz na Telegramie</a>
+          <a href="#posters" class="btn btn-secondary">Zobacz kolekcję</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 Tutéjszy Vibe — Wszystkie prawa zastrzeżone
   </footer>
 </body>
 </html>
