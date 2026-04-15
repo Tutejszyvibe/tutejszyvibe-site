@@ -1,0 +1,67 @@
+from telegram import Update, KeyboardButton, ReplyKeyboardMarkup, WebAppInfo
+from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
+import json
+
+TOKEN = "8637256011:AAEAi04TVx-zAcQ_JHgumfDDCeH-hbmTvS8"
+WEB_APP_URL = "https://tutejszyvibe.github.io/tutejszyvibe-site/app.html"
+
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    keyboard = ReplyKeyboardMarkup(
+        [[KeyboardButton(text="🖼 Otwórz sklep", web_app=WebAppInfo(url=WEB_APP_URL))]],
+        resize_keyboard=True
+    )
+    await update.message.reply_text(
+        "Witaj! Otwórz mini app i wybierz plakaty.",
+        reply_markup=keyboard
+    )
+
+async def shop(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    keyboard = ReplyKeyboardMarkup(
+        [[KeyboardButton(text="🖼 Otwórz sklep", web_app=WebAppInfo(url=WEB_APP_URL))]],
+        resize_keyboard=True
+    )
+    await update.message.reply_text(
+        "Kliknij przycisk poniżej, aby otworzyć mini app.",
+        reply_markup=keyboard
+    )
+
+async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "1. Otwórz mini app\n"
+        "2. Wybierz plakaty i format\n"
+        "3. Kliknij Zamów\n"
+        "4. Zamówienie zostanie wysłane przez Telegram"
+    )
+
+async def handle_web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.message.web_app_data:
+        data = update.message.web_app_data.data
+        try:
+            parsed = json.loads(data)
+            cart = parsed.get("cart", [])
+            if not cart:
+                await update.message.reply_text("Koszyk jest pusty.")
+                return
+
+            lines = []
+            for i, item in enumerate(cart, start=1):
+                title = item.get("title", "Unknown")
+                size = item.get("size", "A4")
+                lines.append(f"{i}. {title} — {size}")
+
+            text = "Nowe zamówienie z mini app:\n\n" + "\n".join(lines)
+            await update.message.reply_text(text)
+        except Exception as e:
+            await update.message.reply_text(f"Błąd odczytu danych: {e}")
+
+def main():
+    app = Application.builder().token(TOKEN).build()
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("shop", shop))
+    app.add_handler(CommandHandler("help", help_command))
+    app.add_handler(MessageHandler(filters.StatusUpdate.WEB_APP_DATA, handle_web_app_data))
+    print("Bot uruchomiony...")
+    app.run_polling()
+
+if __name__ == "__main__":
+    main()

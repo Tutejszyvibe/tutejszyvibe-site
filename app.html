@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Tutéjszy Vibe Mini App</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --bg: #0b0b0d;
+      --panel: rgba(255,255,255,0.05);
+      --panel-2: rgba(255,255,255,0.08);
+      --line: rgba(255,255,255,0.10);
+      --text: #f4f1ea;
+      --muted: #b6b2aa;
+      --gold: #d0a35b;
+      --gold-2: #f0c27c;
+      --radius: 22px;
+      --shadow: 0 18px 40px rgba(0,0,0,0.35);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(208,163,91,0.14), transparent 25%),
+        linear-gradient(180deg, #0a0a0c 0%, #111116 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .app {
+      width: min(100%, 920px);
+      margin: 0 auto;
+      padding: 18px 14px 120px;
+    }
+
+    .hero { padding: 12px 4px 22px; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      color: var(--gold-2);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    h1 {
+      margin: 14px 0 10px;
+      font-size: clamp(30px, 8vw, 52px);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+    }
+
+    .lead {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+      max-width: 680px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      margin: 18px 0 22px;
+    }
+
+    .search, .pill-button {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      border-radius: 16px;
+      min-height: 48px;
+      padding: 0 14px;
+      font-size: 15px;
+    }
+
+    .pill-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .catalog {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-image {
+      position: relative;
+      aspect-ratio: 3 / 4;
+      overflow: hidden;
+      background: #17171b;
+    }
+
+    .card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-body {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .card-title {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.15;
+    }
+
+    .card-subtitle {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+      margin: 0;
+      min-height: 36px;
+    }
+
+    .sizes {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .size-chip {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: .18s ease;
+    }
+
+    .size-chip.active {
+      background: rgba(208,163,91,0.16);
+      border-color: rgba(208,163,91,0.45);
+      color: var(--gold-2);
+    }
+
+    .card-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: auto;
+    }
+
+    button { font: inherit; }
+
+    .btn {
+      min-height: 42px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      cursor: pointer;
+      font-weight: 600;
+      transition: .18s ease;
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, var(--gold), var(--gold-2));
+      color: #181818;
+      border: none;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+
+    .cart {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 20;
+      padding: 12px 14px calc(12px + env(safe-area-inset-bottom));
+      background: linear-gradient(180deg, rgba(11,11,13,0), rgba(11,11,13,.95) 26%);
+      pointer-events: none;
+    }
+
+    .cart-inner {
+      width: min(100%, 920px);
+      margin: 0 auto;
+      background: rgba(18,18,24,0.96);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      pointer-events: auto;
+    }
+
+    .cart-info { min-width: 0; }
+
+    .cart-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin: 0 0 2px;
+    }
+
+    .cart-text {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 420px;
+    }
+
+    .cart-actions {
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .drawer {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 50;
+      padding: 16px;
+    }
+
+    .drawer.open { display: flex; }
+
+    .drawer-panel {
+      width: min(100%, 760px);
+      max-height: 88vh;
+      overflow: auto;
+      background: #101015;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .drawer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .drawer-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .cart-row {
+      display: grid;
+      grid-template-columns: 52px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 10px;
+    }
+
+    .cart-row img {
+      width: 52px;
+      height: 68px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .muted { color: var(--muted); }
+
+    .empty {
+      color: var(--muted);
+      text-align: center;
+      padding: 20px 10px;
+    }
+
+    @media (max-width: 560px) {
+      .toolbar { grid-template-columns: 1fr; }
+      .card-actions { grid-template-columns: 1fr; }
+      .cart-inner {
+        align-items: stretch;
+        flex-direction: column;
+      }
+      .cart-actions { width: 100%; }
+      .cart-actions .btn { flex: 1; }
+      .cart-text {
+        max-width: none;
+        white-space: normal;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <section class="hero">
+      <div class="badge">Telegram Mini App</div>
+      <h1>Tutéjszy Vibe Posters</h1>
+      <p class="lead">
+        Wybierz plakat, zaznacz format i wyślij zamówienie bezpośrednio z Telegrama.
+      </p>
+    </section>
+
+    <section class="toolbar">
+      <input id="searchInput" class="search" type="text" placeholder="Szukaj plakatu..." />
+      <button id="openCartButton" class="pill-button">🛒 Koszyk <span id="cartCount">0</span></button>
+    </section>
+
+    <section id="catalog" class="catalog"></section>
+  </div>
+
+  <div class="cart">
+    <div class="cart-inner">
+      <div class="cart-info">
+        <p class="cart-title">Gotowe do zamówienia</p>
+        <p id="cartSummary" class="cart-text">Koszyk jest pusty.</p>
+      </div>
+      <div class="cart-actions">
+        <button id="clearCartButton" class="btn">Wyczyść</button>
+        <button id="orderButton" class="btn primary">Zamów</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="drawer" class="drawer">
+    <div class="drawer-panel">
+      <div class="drawer-top">
+        <div>
+          <h2 style="margin:0; font-size:24px;">Twój koszyk</h2>
+          <p class="muted" style="margin:6px 0 0;">Sprawdź wybrane plakaty i formaty.</p>
+        </div>
+        <button id="closeDrawerButton" class="btn">Zamknij</button>
+      </div>
+      <div id="drawerList" class="drawer-list"></div>
+      <div class="empty" id="drawerEmpty">Koszyk jest pusty.</div>
+    </div>
+  </div>
+
+  <script>
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+    }
+
+    const posters = [
+      { id: 'tram', title: 'Tramwaj i łuk', subtitle: 'Tram & Arc / Straßenbahn und Bogen', image: 'T.png' },
+      { id: 'sunset', title: 'Zachód słońca', subtitle: 'Sunset / Sonnenuntergang', image: 'Zakat.jpg' },
+      { id: 'trzebnicka', title: 'Trzebnicka', subtitle: 'Trzebnicka Street / Trzebnicka-Straße', image: 'ChatGPT Image 14 апр. 2026 г., 18_54_23 (1).png' },
+      { id: 'pigeons', title: 'Gołębie', subtitle: 'Pigeons / Tauben', image: 'ChatGPT Image 14 апр. 2026 г., 18_28_59.png' },
+      { id: 'rainbow', title: 'Tęcza nad uczelnią', subtitle: 'Rainbow over School / Regenbogen über Schule', image: 'SH.png' },
+      { id: 'school', title: 'Uczelnia o zachodzie', subtitle: 'School at Sunset / Schule bei Sonnenuntergang', image: 'SH1.png' },
+      { id: 'bridge-geo', title: 'Geometria mostu', subtitle: 'Bridge Geometry / Brückengeometrie', image: 'Most.png' },
+      { id: 'bridge-sym', title: 'Symetria mostu', subtitle: 'Bridge Symmetry / Brückensymmetrie', image: '86631c63-646f-4e8c-b9aa-de7be326ac3c.png' }
+    ];
+
+    const sizes = ['A4', 'A3', 'A2'];
+    const cart = [];
+
+    const catalog = document.getElementById('catalog');
+    const searchInput = document.getElementById('searchInput');
+    const cartCount = document.getElementById('cartCount');
+    const cartSummary = document.getElementById('cartSummary');
+    const drawer = document.getElementById('drawer');
+    const drawerList = document.getElementById('drawerList');
+    const drawerEmpty = document.getElementById('drawerEmpty');
+
+    function renderCatalog(query = '') {
+      const q = query.trim().toLowerCase();
+      const filtered = posters.filter(p =>
+        p.title.toLowerCase().includes(q) || p.subtitle.toLowerCase().includes(q)
+      );
+
+      catalog.innerHTML = filtered.map(p => `
+        <article class="card">
+          <div class="card-image">
+            <img src="${p.image}" alt="${p.title}">
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">${p.title}</h3>
+            <p class="card-subtitle">${p.subtitle}</p>
+            <div class="sizes">
+              ${sizes.map((size, i) => `<button class="size-chip ${i === 0 ? 'active' : ''}" data-poster="${p.id}" data-size="${size}">${size}</button>`).join('')}
+            </div>
+            <div class="card-actions">
+              <button class="btn" onclick="previewPoster('${p.id}')">Podgląd</button>
+              <button class="btn primary" onclick="addToCart('${p.id}')">Dodaj</button>
+            </div>
+          </div>
+        </article>
+      `).join('');
+
+      bindSizeChips();
+    }
+
+    function bindSizeChips() {
+      document.querySelectorAll('.size-chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const posterId = btn.dataset.poster;
+          document.querySelectorAll(`.size-chip[data-poster="${posterId}"]`).forEach(el => el.classList.remove('active'));
+          btn.classList.add('active');
+        });
+      });
+    }
+
+    function getSelectedSize(posterId) {
+      return document.querySelector(`.size-chip[data-poster="${posterId}"].active`)?.dataset.size || 'A4';
+    }
+
+    window.addToCart = function(posterId) {
+      const poster = posters.find(p => p.id === posterId);
+      if (!poster) return;
+      const size = getSelectedSize(posterId);
+      cart.push({ ...poster, size });
+      updateCart();
+    }
+
+    window.previewPoster = function(posterId) {
+      const poster = posters.find(p => p.id === posterId);
+      if (!poster) return;
+      if (tg?.openLink) tg.openLink(poster.image);
+      else window.open(poster.image, '_blank');
+    }
+
+    function updateCart() {
+      cartCount.textContent = cart.length;
+      cartSummary.textContent = cart.length
+        ? cart.map(item => `${item.title} (${item.size})`).join(', ')
+        : 'Koszyk jest pusty.';
+      renderDrawer();
+      syncMainButton();
+    }
+
+    function renderDrawer() {
+      drawerList.innerHTML = cart.map((item, index) => `
+        <div class="cart-row">
+          <img src="${item.image}" alt="${item.title}">
+          <div>
+            <div style="font-weight:700;">${item.title}</div>
+            <div class="muted" style="font-size:13px;">${item.subtitle}</div>
+            <div style="font-size:13px; margin-top:4px;">Format: <strong>${item.size}</strong></div>
+          </div>
+          <button class="btn" onclick="removeFromCart(${index})">Usuń</button>
+        </div>
+      `).join('');
+      drawerEmpty.style.display = cart.length ? 'none' : 'block';
+    }
+
+    window.removeFromCart = function(index) {
+      cart.splice(index, 1);
+      updateCart();
+    }
+
+    function openDrawer() { drawer.classList.add('open'); }
+    function closeDrawer() { drawer.classList.remove('open'); }
+
+    function orderNow() {
+      if (!cart.length) return;
+
+      if (tg?.sendData) {
+        tg.sendData(JSON.stringify({
+          source: 'tutejszy_vibe_mini_app',
+          cart
+        }));
+      }
+
+      if (tg?.MainButton) tg.MainButton.hide();
+      if (tg?.close) tg.close();
+    }
+
+    function syncMainButton() {
+      if (!tg?.MainButton) return;
+      if (cart.length) {
+        tg.MainButton.setText(`Zamów (${cart.length})`);
+        tg.MainButton.show();
+      } else {
+        tg.MainButton.hide();
+      }
+    }
+
+    searchInput.addEventListener('input', e => renderCatalog(e.target.value));
+    document.getElementById('openCartButton').addEventListener('click', openDrawer);
+    document.getElementById('closeDrawerButton').addEventListener('click', closeDrawer);
+    document.getElementById('clearCartButton').addEventListener('click', () => {
+      cart.length = 0;
+      updateCart();
+    });
+    document.getElementById('orderButton').addEventListener('click', orderNow);
+    drawer.addEventListener('click', e => {
+      if (e.target === drawer) closeDrawer();
+    });
+
+    if (tg?.MainButton) tg.MainButton.onClick(orderNow);
+
+    renderCatalog();
+    updateCart();
+  </script>
+</body>
+</html>
