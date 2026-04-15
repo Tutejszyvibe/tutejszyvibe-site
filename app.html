@@ -7,6 +7,20 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
+      --bg: #f6f1e8;
+      --panel: rgba(255,255,255,0.78);
+      --panel-2: rgba(255,255,255,0.92);
+      --line: rgba(48,34,16,0.10);
+      --text: #24190f;
+      --muted: #7a6858;
+      --gold: #c8923f;
+      --gold-2: #e6b86b;
+      --danger: #ff6b6b;
+      --radius: 22px;
+      --shadow: 0 18px 40px rgba(36,25,15,0.10);
+    }
+
+    body.dark-theme {
       --bg: #0b0b0d;
       --panel: rgba(255,255,255,0.05);
       --panel-2: rgba(255,255,255,0.08);
@@ -15,31 +29,41 @@
       --muted: #b6b2aa;
       --gold: #d0a35b;
       --gold-2: #f0c27c;
-      --danger: #ff6b6b;
-      --radius: 22px;
       --shadow: 0 18px 40px rgba(0,0,0,0.35);
     }
 
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+
     body {
       margin: 0;
       font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background:
         radial-gradient(circle at top left, rgba(208,163,91,0.14), transparent 25%),
-        linear-gradient(180deg, #0a0a0c 0%, #111116 100%);
+        linear-gradient(180deg, #fffaf2 0%, var(--bg) 100%);
       color: var(--text);
       min-height: 100vh;
     }
 
+    body.dark-theme {
+      background:
+        radial-gradient(circle at top left, rgba(208,163,91,0.14), transparent 25%),
+        linear-gradient(180deg, #0a0a0c 0%, #111116 100%);
+    }
+
     .app {
-      width: min(100%, 920px);
+      width: min(100%, 980px);
       margin: 0 auto;
       padding: 18px 14px 120px;
     }
 
     .hero {
-      padding: 12px 4px 22px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+      margin-bottom: 16px;
     }
 
     .badge {
@@ -63,6 +87,7 @@
       font-size: clamp(30px, 8vw, 52px);
       line-height: 1.02;
       letter-spacing: -0.04em;
+      color: var(--text);
     }
 
     .lead {
@@ -82,12 +107,17 @@
 
     .search, .pill-button {
       border: 1px solid var(--line);
-      background: rgba(255,255,255,0.04);
+      background: var(--panel-2);
       color: var(--text);
       border-radius: 16px;
       min-height: 48px;
       padding: 0 14px;
       font-size: 15px;
+      box-shadow: var(--shadow);
+    }
+
+    .search::placeholder {
+      color: var(--muted);
     }
 
     .pill-button {
@@ -107,20 +137,21 @@
     }
 
     .card {
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      background: var(--panel);
       border: 1px solid var(--line);
       border-radius: var(--radius);
       overflow: hidden;
       box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
+      backdrop-filter: blur(10px);
     }
 
     .card-image {
       position: relative;
       aspect-ratio: 3 / 4;
       overflow: hidden;
-      background: #17171b;
+      background: #d8c4a5;
     }
 
     .card-image img {
@@ -190,7 +221,7 @@
       min-height: 42px;
       border-radius: 14px;
       border: 1px solid var(--line);
-      background: rgba(255,255,255,0.04);
+      background: var(--panel-2);
       color: var(--text);
       cursor: pointer;
       font-weight: 600;
@@ -212,16 +243,16 @@
       bottom: 0;
       z-index: 20;
       padding: 12px 14px calc(12px + env(safe-area-inset-bottom));
-      background: linear-gradient(180deg, rgba(11,11,13,0), rgba(11,11,13,.95) 26%);
+      background: linear-gradient(180deg, rgba(11,11,13,0), rgba(11,11,13,.55) 26%, rgba(11,11,13,.75));
       pointer-events: none;
     }
 
     .cart-inner {
       width: min(100%, 920px);
       margin: 0 auto;
-      background: rgba(18,18,24,0.96);
+      background: var(--panel-2);
       border: 1px solid var(--line);
-      border-radius: 18px;
+      border-radius: 20px;
       box-shadow: var(--shadow);
       padding: 12px;
       display: flex;
@@ -229,6 +260,7 @@
       justify-content: space-between;
       gap: 12px;
       pointer-events: auto;
+      backdrop-filter: blur(12px);
     }
 
     .cart-info {
@@ -274,11 +306,12 @@
       width: min(100%, 760px);
       max-height: 88vh;
       overflow: auto;
-      background: #101015;
+      background: var(--panel-2);
       border: 1px solid var(--line);
       border-radius: 24px;
       box-shadow: var(--shadow);
       padding: 18px;
+      color: var(--text);
     }
 
     .drawer-top {
@@ -313,6 +346,7 @@
     }
 
     .muted { color: var(--muted); }
+
     .empty {
       color: var(--muted);
       text-align: center;
@@ -347,10 +381,9 @@
   <div class="app">
     <section class="hero">
       <div class="badge">Telegram Mini App</div>
-      <h1>Tutéjszy Vibe Posters</h1>
+      <h1>Tutéjszy Vibe Plakaty</h1>
       <p class="lead">
-        Wybierz plakat, zaznacz format i wyślij zamówienie bezpośrednio z Telegrama.
-        Ta mini-app działa jako witryna sprzedażowa w Twoim bocie.
+        Wybierz plakat, zaznacz format i zamów bezpośrednio z Telegrama. Możesz też od razu przejść do płatności online.
       </p>
     </section>
 
@@ -395,10 +428,21 @@
     if (tg) {
       tg.ready();
       tg.expand();
-      document.body.style.background = tg.themeParams?.bg_color || '#0b0b0d';
+
+      const bg = tg.themeParams?.bg_color || '#ffffff';
+      const hex = bg.replace('#', '');
+      const full = hex.length === 3 ? hex.split('').map(c => c + c).join('') : hex;
+      const r = parseInt(full.substring(0, 2), 16);
+      const g = parseInt(full.substring(2, 4), 16);
+      const b = parseInt(full.substring(4, 6), 16);
+      const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+      if (brightness < 140) {
+        document.body.classList.add('dark-theme');
+      }
     }
 
-    const CONTACT_USERNAME = 'pokerathletespro';
+    const CONTACT_USERNAME = 'hlbtyr';
     const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/aFadR91Pn8Xy845gpc5c401';
 
     const posters = [
@@ -472,7 +516,7 @@
       cart.push({ ...poster, size });
       updateCart();
       if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-    }
+    };
 
     window.previewPoster = function previewPoster(posterId) {
       const poster = posters.find(p => p.id === posterId);
@@ -482,7 +526,7 @@
       } else {
         window.open(poster.image, '_blank');
       }
-    }
+    };
 
     function updateCart() {
       cartCount.textContent = cart.length;
@@ -513,7 +557,7 @@
     window.removeFromCart = function removeFromCart(index) {
       cart.splice(index, 1);
       updateCart();
-    }
+    };
 
     function openDrawer() { drawer.classList.add('open'); }
     function closeDrawer() { drawer.classList.remove('open'); }
@@ -545,7 +589,7 @@
     function syncMainButton() {
       if (!tg?.MainButton) return;
       if (cart.length) {
-        tg.MainButton.setText(`Zamów (${cart.length})`);
+        tg.MainButton.setText(`Kontakt (${cart.length})`);
         tg.MainButton.show();
       } else {
         tg.MainButton.hide();
