@@ -15,13 +15,13 @@
       --muted: #b6b2aa;
       --gold: #d0a35b;
       --gold-2: #f0c27c;
+      --danger: #ff6b6b;
       --radius: 22px;
       --shadow: 0 18px 40px rgba(0,0,0,0.35);
     }
 
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-
     body {
       margin: 0;
       font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -38,7 +38,9 @@
       padding: 18px 14px 120px;
     }
 
-    .hero { padding: 12px 4px 22px; }
+    .hero {
+      padding: 12px 4px 22px;
+    }
 
     .badge {
       display: inline-flex;
@@ -180,7 +182,9 @@
       margin-top: auto;
     }
 
-    button { font: inherit; }
+    button {
+      font: inherit;
+    }
 
     .btn {
       min-height: 42px;
@@ -227,7 +231,9 @@
       pointer-events: auto;
     }
 
-    .cart-info { min-width: 0; }
+    .cart-info {
+      min-width: 0;
+    }
 
     .cart-title {
       font-size: 14px;
@@ -307,7 +313,6 @@
     }
 
     .muted { color: var(--muted); }
-
     .empty {
       color: var(--muted);
       text-align: center;
@@ -315,14 +320,22 @@
     }
 
     @media (max-width: 560px) {
-      .toolbar { grid-template-columns: 1fr; }
-      .card-actions { grid-template-columns: 1fr; }
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+      .card-actions {
+        grid-template-columns: 1fr;
+      }
       .cart-inner {
         align-items: stretch;
         flex-direction: column;
       }
-      .cart-actions { width: 100%; }
-      .cart-actions .btn { flex: 1; }
+      .cart-actions {
+        width: 100%;
+      }
+      .cart-actions .btn {
+        flex: 1;
+      }
       .cart-text {
         max-width: none;
         white-space: normal;
@@ -337,6 +350,7 @@
       <h1>Tutéjszy Vibe Posters</h1>
       <p class="lead">
         Wybierz plakat, zaznacz format i wyślij zamówienie bezpośrednio z Telegrama.
+        Ta mini-app działa jako witryna sprzedażowa w Twoim bocie.
       </p>
     </section>
 
@@ -356,7 +370,8 @@
       </div>
       <div class="cart-actions">
         <button id="clearCartButton" class="btn">Wyczyść</button>
-        <button id="orderButton" class="btn primary">Zamów</button>
+        <button id="contactButton" class="btn">Kontakt</button>
+        <button id="payButton" class="btn primary">Zapłać online</button>
       </div>
     </div>
   </div>
@@ -380,7 +395,11 @@
     if (tg) {
       tg.ready();
       tg.expand();
+      document.body.style.background = tg.themeParams?.bg_color || '#0b0b0d';
     }
+
+    const CONTACT_USERNAME = 'pokerathletespro';
+    const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/aFadR91Pn8Xy845gpc5c401';
 
     const posters = [
       { id: 'tram', title: 'Tramwaj i łuk', subtitle: 'Tram & Arc / Straßenbahn und Bogen', image: 'T.png' },
@@ -411,14 +430,14 @@
       );
 
       catalog.innerHTML = filtered.map(p => `
-        <article class="card">
+        <article class="card" data-id="${p.id}">
           <div class="card-image">
             <img src="${p.image}" alt="${p.title}">
           </div>
           <div class="card-body">
             <h3 class="card-title">${p.title}</h3>
             <p class="card-subtitle">${p.subtitle}</p>
-            <div class="sizes">
+            <div class="sizes" data-sizes="${p.id}">
               ${sizes.map((size, i) => `<button class="size-chip ${i === 0 ? 'active' : ''}" data-poster="${p.id}" data-size="${size}">${size}</button>`).join('')}
             </div>
             <div class="card-actions">
@@ -446,26 +465,32 @@
       return document.querySelector(`.size-chip[data-poster="${posterId}"].active`)?.dataset.size || 'A4';
     }
 
-    window.addToCart = function(posterId) {
+    window.addToCart = function addToCart(posterId) {
       const poster = posters.find(p => p.id === posterId);
       if (!poster) return;
       const size = getSelectedSize(posterId);
       cart.push({ ...poster, size });
       updateCart();
+      if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
     }
 
-    window.previewPoster = function(posterId) {
+    window.previewPoster = function previewPoster(posterId) {
       const poster = posters.find(p => p.id === posterId);
       if (!poster) return;
-      if (tg?.openLink) tg.openLink(poster.image);
-      else window.open(poster.image, '_blank');
+      if (tg?.openLink) {
+        tg.openLink(poster.image);
+      } else {
+        window.open(poster.image, '_blank');
+      }
     }
 
     function updateCart() {
       cartCount.textContent = cart.length;
-      cartSummary.textContent = cart.length
-        ? cart.map(item => `${item.title} (${item.size})`).join(', ')
-        : 'Koszyk jest pusty.';
+      if (!cart.length) {
+        cartSummary.textContent = 'Koszyk jest pusty.';
+      } else {
+        cartSummary.textContent = cart.map(item => `${item.title} (${item.size})`).join(', ');
+      }
       renderDrawer();
       syncMainButton();
     }
@@ -485,7 +510,7 @@
       drawerEmpty.style.display = cart.length ? 'none' : 'block';
     }
 
-    window.removeFromCart = function(index) {
+    window.removeFromCart = function removeFromCart(index) {
       cart.splice(index, 1);
       updateCart();
     }
@@ -493,18 +518,28 @@
     function openDrawer() { drawer.classList.add('open'); }
     function closeDrawer() { drawer.classList.remove('open'); }
 
-    function orderNow() {
+    function contactNow() {
       if (!cart.length) return;
+      const lines = cart.map((item, idx) => `${idx + 1}. ${item.title} — ${item.size}`).join('%0A');
+      const message = `Cześć! Chcę zamówić:%0A${lines}`;
+      const telegramUrl = `https://t.me/${CONTACT_USERNAME}?text=${message}`;
 
-      if (tg?.sendData) {
-        tg.sendData(JSON.stringify({
-          source: 'tutejszy_vibe_mini_app',
-          cart
-        }));
+      if (tg?.openTelegramLink) {
+        tg.openTelegramLink(telegramUrl);
+      } else if (tg?.openLink) {
+        tg.openLink(telegramUrl);
+      } else {
+        window.open(telegramUrl, '_blank');
       }
+    }
 
-      if (tg?.MainButton) tg.MainButton.hide();
-      if (tg?.close) tg.close();
+    function payOnline() {
+      if (!cart.length) return;
+      if (tg?.openLink) {
+        tg.openLink(STRIPE_PAYMENT_LINK);
+      } else {
+        window.open(STRIPE_PAYMENT_LINK, '_blank');
+      }
     }
 
     function syncMainButton() {
@@ -524,12 +559,15 @@
       cart.length = 0;
       updateCart();
     });
-    document.getElementById('orderButton').addEventListener('click', orderNow);
+    document.getElementById('contactButton').addEventListener('click', contactNow);
+    document.getElementById('payButton').addEventListener('click', payOnline);
     drawer.addEventListener('click', e => {
       if (e.target === drawer) closeDrawer();
     });
 
-    if (tg?.MainButton) tg.MainButton.onClick(orderNow);
+    if (tg?.MainButton) {
+      tg.MainButton.onClick(contactNow);
+    }
 
     renderCatalog();
     updateCart();
